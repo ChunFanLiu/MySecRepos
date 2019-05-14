@@ -1,0 +1,339 @@
+---
+title: "程式設計講義：R"
+author: "B14041205劉純帆"
+output:
+  html_document: 
+    toc: yes
+---
+  
+  
+  
+  
+  
+  
+**************
+  
+  
+# 基本運算
+
+R 語言基本資料型態為向量, 因此主要的運算也是向量運算,純量也可被表示為1*1的向量
+
+運算子   | 說明    
+-------- | ----------
++-*/     | 加減乘除
+^        | 次方
+%/%      | 除法取商
+%%       | 除法取餘數
+%*%      | 矩陣乘法
+
+**向量運算範例**
+```{r paged.print=FALSE}
+v<-c(1,2,3)
+u<-c(3,2,1)
+v+u
+u/v
+u%%v
+```
+
+
+
+**矩陣乘法範例**
+```{r}
+A<-matrix(c(1,0,0,0,1,0,0,0,1),3,3)
+B<-matrix(c(1,2,3,1,2,3,1,2,3),3,3)
+A%*%B
+```
+**若直接用乘法符號，則為單元相乘**
+```{r echo=FALSE}
+A<-matrix(c(1,0,0,0,1,0,0,0,1),3,3)
+B<-matrix(c(1,2,3,1,2,3,1,2,3),3,3)
+A*B
+```
+
+
+
+R主要以「行」來排序，所以若在未指定的情形下
+```{r}
+C<-matrix(c(1,2,3,4,5,6),nrow = 2,ncol = 3)
+C
+```
+若指定以「列」排序
+
+```{r}
+c<-matrix(c(1,2,3,4,5,6),nrow = 2,ncol = 3, byrow=TRUE)
+c
+```
+  
+************
+  
+  
+## 提取特定數值  
+  
+R的起始位置是從1開始，不像C或PYTHON是從0開始   
+  
+**若有一資料**
+```{r}
+z<-c(10,20,30,40,50)
+```
+**取z的第一位數值**
+```{r}
+z[1]
+```
+
+**若想取某列某行的數值** 
+
+```{r}
+color=c("red","red","red1","blue")
+number=c(1,3,5,7)
+logic=c(T,T,F,F)
+out.fr=data.frame(colors=color,numbers=number,logics=logic)
+out.fr
+```  
+
+**取出第一列第二行的數值**  
+```{r}  
+out.fr[1,2]
+```
+
+**取出第二列第二、三行的數值**  
+```{r}  
+out.fr[2,c(2,3)]
+```
+  
+以上兩種是以位置叫出數值(call by position)  
+也可以名稱叫出一整行或列(call by name)
+```{r}  
+out.fr$logics
+```
+
+********
+  
+  
+# 基本函數   
+  
+函數指令  | 說明       | 範例         | 結果
+--------  | ---------- | -----------  | ------- 
+c()       | 連結成向量 | c(1,3,5)     | 
+seq()     | 建造數列   | seq(1,5,2)   | 1 3 5   
+rep()     | 重覆數列   | rep(c(1,3,5),2)  | 1 3 5 1 3 5 
+matrix()  | 建立矩陣   | 
+rbind()   | 以列的形式合併 | rbind(c(1,3,5),c(2,4,6))  | ![](https://imgur.com/FCD31tF.jpg)
+cbind()   | 以行的形式合併 | cbind(c(1,3,5),c(2,4,6))  | ![](https://imgur.com/t0ip0D0.jpg)
+length()  | 計算元素數量   | length(c(1,3,5))  | 3
+sort()    | 排序   | sort(c(5,10,7,3))  | 3 5 7 10 
+round()   | 四捨五入 | round(2.8561531,digits=2) | 2.86
+floor()   | 無條件捨去  | floor(2.8561531) | 2
+ceiling() | 無條件進位 | ceiling(2.8561531) | 3
+print()   | 輸出一個物件內容 | print(u) | 3 2 1 
+abs()     | 絕對值   |  abs(c(1,-2,3,4,-5)) | 1 2 3 4 5
+    
+  
+***********
+    
+    
+# 統計函數  
+  
+函數指令  | 說明       | 範例         | 結果
+--------  | ---------- | -----------  | ------- 
+mean()    | 平均數     | mean(c(1,3,5)) | 3
+sd()      | 標準差     | sd(c(1,3,5)) | 2
+var()     | 變異數     | var(c(1,3,5)) | 16.3333
+quantile() | 百分位數  | quantile(seq(0:10)) | 25%：3.25、50%：5.5、75%：7.75
+median() | 中位數  | median(c(1,3,5)) | 3
+range() | 全距 | range(c(1,3,5))  | 1 5 
+sum()   | 總和 | sum(c(1,3,5)) | 9
+min()   | 最小值 | min(c(1,3,5)) | 1
+max()   | 最大值 | max(c(1,3,5)) | 5
+sqrt()  | 平方根 | sqrt(c(1,4,9)) | 1 2 3  
+factorial() | 階乘函數 | factorial(5) | 120
+sample()  | 抽樣 |  sample(c(2,4,6,8),size=3,replace=T) | 8 6 6
+  
+  
+  
+  
+********
+  
+  
+# 繪圖    
+  
+## 常見圖表    
+  
+1. 散布圖Scatter Diagram  
+  
+```{r}
+plot(cars,xlab="speed",ylab="dist",type="p")
+
+```
+  
+2. 長條圖bar chart  
+  
+```{r}
+barplot(VADeaths,beside=TRUE,
+ylab="Deaths per 1000",
+main="Death rates in Virginia")
+```
+
+3. 點圖  
+  
+```{r}
+dotchart(VADeaths,xlim=c(0,75),
+xlab="Deaths per 1000",
+main="Death rates in Virginia")
+```
+  
+4. 直方圖histogram  
+  
+```{r}
+set.seed(6)
+x=rnorm(100)
+hist(x)
+```
+  
+5. 圓餅圖pie chart  
+```{r}
+groupsizes=c(10,10,18,30,32)
+labels=c("甲","乙","丙","丁","戊")
+pie(groupsizes,labels,col=c("grey40", "white", "grey","black", "grey90"))
+```
+  
+6. 盒形圖boxplot  
+```{r}
+boxplot(Sepal.Length~Species,data=iris,
+ylab="Sepal length(cm)",main="Iris measurements",
+boxwex=0.1)
+```
+   
+  
+  
+**********************  
+  
+
+## 統計分布
+    
+常見的分布如常態、t、F、二項分布……在R裡都有相對應的函數  
+而在分布函數前加上以下符號可更快速因應各種題目要求  
+  
+通用符號   | 說明    
+-------- | ----------
+d     | 機率密度函數f(x)  
+p        | 機率；分布函數F(x)
+r      | 產生相同分布的隨機數
+q       | 求分位數
+  
+  
+**以均勻分布(0,1)，作為示範**  
+_生成10000個隨機數_
+```{r}
+x=runif(100000,0,1)
+hist(x)
+```
+由上圖可知x的分布近似均勻分布  
+    
+     
+```{r}
+mean(x)
+```
+依照定義，均勻分布(0,1)的平均應是(1+0)/2=0.5  
+與上述答案相差不遠  
+  
+```{r}
+var(x)
+```
+依照定義，均勻分布(0,1)的變異數應是(1+0)^2/12=0.08333333  
+與上述答案差異也是很小  
+   
+```{r}
+punif(0.5,0,1)
+```
+依照定義，均勻分布(0,1)之下，機率0.5應該落在上下限的中間  
+    
+```{r}
+qunif(0.25,0,1)
+```
+依照定義，均勻分布(0,1)之下，第一四分位數應該落在上下限的1/4處  
+  
+  
+*****************
+  
+# 繪圖控制
+  
+    
+常用   | 說明    
+-------- | ----------
+title()  | 輸入標題
+par()    | 將多個圖表放在同一張
+mtext()  | 標示文字在邊界上
+text()   | 標示文字在圖中
+points()  | 標示點在圖中
+   
+  
+  
+**圖中用到哪些指令？**
+![](https://imgur.com/ReBNyr5.jpg)
+
+
+```
+par(mfrow=c(1,2),mar=c(4,2,4,2)) 
+```
+_製作一個一列兩行的模板，其上下邊界=4，左右邊界=2_   
+```
+groupsizes=c(34,34,13.5,13.5,2.5,2.5)  
+labels=c("-1~0","0~1","1~2","-2~-1","<-2",">2")  
+pie(groupsizes,labels)  
+```
+_輸入比例資料和對應標籤，製作圓餅圖_  
+```
+title("Exercise1")  
+```
+_輸入圖一標題_  
+```
+plot(pressure)  
+```
+_使用R中的資料製圖_  
+```
+title("Exercise2")
+```
+_輸入圖二標題_  
+```
+mtext(paste("pressure"),side=2,line=3)  
+```
+_在圖表左邊往外三行處寫下"pressure"_  
+```
+mtext(paste("temperature"),side=1,line=3)  
+```
+_在圖表下方往外三行處寫下"temperature"_
+```  
+points(100,600)  
+```
+_在圖二座標(100,600)處標上一點_
+```  
+text(100,550,"outlier",cex=1)  
+```
+_在上述標點之下加上文字敘述，並控制字體_
+  
+  
+  
+
+**************  
+*********
+# 參考資料  
+  
+http://ccckmit.wikidot.com/r:card    
+https://www.slideshare.net/chenpanliao/slide-44171070  
+https://yijutseng.github.io/DataScienceRBook/intro.html#section-1.6.2   
+http://yhhuang1966.blogspot.com/2017/12/r_21.html  
+https://kknews.cc/zh-tw/tech/z6zpqxl.html   
+程式設計課程講義
+
+
+
+
+
+
+
+
+
+
+
+
+
